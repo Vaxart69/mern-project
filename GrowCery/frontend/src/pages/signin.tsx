@@ -1,94 +1,42 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import AnimatedShapes from "../components/AnimatedShapes";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
+  const [form, setForm] = useState({ email: "", password: "" });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const formVariants = {
+    hidden: { opacity: 0, y: -40 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+  };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[#121212]">
-      <div className="hidden md:flex w-1/2 h-screen items-center justify-center">
-        <svg
-          width="100%"
-          height="100%"
-          viewBox="0 0 800 800"
-          className="w-full h-full"
-        >
-          <circle cx="200" cy="650" r="140" fill="#6200EE" />
-
-          <circle cx="450" cy="450" r="100" fill="#7C3AED" />
-
-          <circle cx="200" cy="350" r="90" fill="#A78BFA" />
-
-          <circle cx="320" cy="150" r="50" fill="#C4B5FD" />
-          <circle cx="500" cy="200" r="45" fill="#8B5CF6" />
-
-          <circle cx="600" cy="100" r="35" fill="#E9D5FF" />
-
-          <circle cx="700" cy="80" r="20" fill="#fff" />
-          <circle cx="750" cy="300" r="12" fill="#fff" />
-          <circle cx="120" cy="400" r="12" fill="#fff" />
-          <circle cx="700" cy="600" r="20" fill="#A78BFA" />
-          <circle cx="600" cy="700" r="25" fill="#C4B5FD" />
-
-          <line
-            x1="100"
-            y1="100"
-            x2="350"
-            y2="160"
-            stroke="#7C3AED"
-            strokeWidth="7"
-          />
-          <line
-            x1="500"
-            y1="250"
-            x2="780"
-            y2="300"
-            stroke="#A78BFA"
-            strokeWidth="7"
-          />
-          <line
-            x1="150"
-            y1="500"
-            x2="400"
-            y2="550"
-            stroke="#8B5CF6"
-            strokeWidth="7"
-          />
-          <line
-            x1="400"
-            y1="700"
-            x2="700"
-            y2="750"
-            stroke="#6200EE"
-            strokeWidth="7"
-          />
-          <line
-            x1="500"
-            y1="350"
-            x2="600"
-            y2="400"
-            stroke="#C4B5FD"
-            strokeWidth="7"
-          />
-          <line
-            x1="100"
-            y1="700"
-            x2="400"
-            y2="750"
-            stroke="#E9D5FF"
-            strokeWidth="7"
-          />
-        </svg>
-      </div>
+      <AnimatedShapes />
 
       <div className="w-full md:w-1/2 h-screen flex items-center justify-center">
-        <form className="bg-[#1E1E1E] rounded-2xl shadow-lg p-10 w-full max-w-md flex flex-col gap-6">
+        <motion.form
+          variants={formVariants}
+          initial="hidden"
+          animate="visible"
+          className="bg-[#1E1E1E] rounded-2xl shadow-lg p-10 w-full max-w-md flex flex-col gap-6"
+        >
           <div className="flex flex-col items-center mb-2">
             <div className="w-20 h-20 rounded-full bg-[#7C3AED] flex items-center justify-center mb-2 shadow-lg">
               <span
                 className="text-4xl font-bold"
                 style={{
                   color: "#1E1E1E",
-                  textShadow: "0 2px 8px #A78BFA",
                 }}
               >
                 G
@@ -102,7 +50,9 @@ export default function SignIn() {
             type="email"
             name="email"
             placeholder="Email"
-            className="px-4 py-3 rounded-xl bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-[#7C3AED]"
+            value={form.email}
+            onChange={handleInputChange}
+            className="px-4 py-3 rounded-xl bg-white text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#7C3AED]"
             required
           />
           <div className="relative">
@@ -110,7 +60,9 @@ export default function SignIn() {
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
-              className="px-4 py-3 rounded-xl bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-[#7C3AED] w-full pr-12"
+              value={form.password}
+              onChange={handleInputChange}
+              className="px-4 py-3 rounded-xl bg-white text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#7C3AED] w-full pr-12"
               required
             />
             <button
@@ -176,14 +128,14 @@ export default function SignIn() {
           </button>
           <div className="mt-2 text-center text-[#C4B5FD] text-sm">
             Don&apos;t have an account?{" "}
-            <a
-              href="/signup"
+            <Link
+              to="/signup"
               className="underline font-semibold text-[#A78BFA]"
             >
               Sign up
-            </a>
+            </Link>
           </div>
-        </form>
+        </motion.form>
       </div>
     </div>
   );
