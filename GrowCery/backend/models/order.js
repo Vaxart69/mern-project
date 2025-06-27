@@ -15,6 +15,10 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    price: { 
+        type: Number,
+        required: true
+    },
     orderStatus: {
         type: Number, // 0 = Pending, 1 = Completed, 2 = Canceled
         enum: [0, 1, 2],

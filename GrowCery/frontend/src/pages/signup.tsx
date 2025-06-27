@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import AnimatedShapes from "../components/AnimatedShapes";
 
 function SignUp() {
- 
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     firstName: "",
     middleName: "",
@@ -16,6 +17,28 @@ function SignUp() {
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Check if user is already logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+
+    if (token && user) {
+      try {
+        const userData = JSON.parse(user);
+        // Redirect based on user type if already logged in
+        if (userData.userType === "admin") {
+          navigate("/admin/order-management", { replace: true });
+        } else {
+          navigate("/customer/home", { replace: true });
+        }
+      } catch (error) {
+        // Invalid data, clear storage
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+      }
+    }
+  }, [navigate]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -26,7 +49,7 @@ function SignUp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccess(""); 
+    setSuccess("");
     setIsLoading(true);
 
     try {
@@ -53,7 +76,6 @@ function SignUp() {
     }
   };
 
-  
   const formVariants = {
     hidden: { opacity: 0, y: 40 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
@@ -72,7 +94,6 @@ function SignUp() {
           exit="exit"
           className="bg-[#1E1E1E] rounded-2xl shadow-lg p-10 w-full max-w-md flex flex-col items-center"
         >
-          
           <div className="flex flex-col items-center mb-2">
             <div className="w-20 h-20 rounded-full bg-[#7C3AED] flex items-center justify-center mb-2 shadow-lg">
               <span

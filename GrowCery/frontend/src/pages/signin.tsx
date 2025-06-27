@@ -1,14 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom"; // <-- import useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import AnimatedShapes from "../components/AnimatedShapes";
 
 export default function SignIn() {
+  // initialize state variables with corresponding usestate hooks
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // <-- for navigation
 
+  // used navigate hook for redirecting after successfull login
+  const navigate = useNavigate();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+
+    if (token && user) {
+      try {
+        const userData = JSON.parse(user);
+        // Redirect based on user type if already logged in
+        if (userData.userType === "admin") {
+          navigate("/admin/order-management", { replace: true });
+        } else {
+          navigate("/customer/home", { replace: true });
+        }
+      } catch (error) {
+        // Invalid data, clear storage
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+      }
+    }
+  }, [navigate]);
+
+  // handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({
@@ -17,31 +43,34 @@ export default function SignIn() {
     }));
   };
 
-  // Add this function:
   const handleSubmit = async (e: React.FormEvent) => {
+    // prevent reload and set error to emptry string
     e.preventDefault();
     setError("");
     try {
+      // fetch the login endpoint
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+
+      // get the response and check if it is ok
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
       }
+      // store the token
       localStorage.setItem("token", data.token);
 
-      // Decode JWT to get user type (should be 'userType')
-      const payload = JSON.parse(atob(data.token.split('.')[1]));
+      const payload = JSON.parse(atob(data.token.split(".")[1]));
       localStorage.setItem("user", JSON.stringify(payload));
 
       // Redirect based on user type
       if (payload.userType === "admin") {
         navigate("/admin/order-management");
       } else {
-        navigate("/customer/order-management");
+        navigate("/customer/home");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
@@ -63,7 +92,7 @@ export default function SignIn() {
           initial="hidden"
           animate="visible"
           className="bg-[#1E1E1E] rounded-2xl shadow-lg p-10 w-full max-w-md flex flex-col gap-6"
-          onSubmit={handleSubmit} // <-- add this
+          onSubmit={handleSubmit}
         >
           <div className="flex flex-col items-center mb-2">
             <div className="w-20 h-20 rounded-full bg-[#7C3AED] flex items-center justify-center mb-2 shadow-lg">

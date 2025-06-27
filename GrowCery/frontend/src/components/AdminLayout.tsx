@@ -1,8 +1,12 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import AdminSidebar from "./AdminSidebar";
+import { useAuth } from "../hooks/useAuth";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
+
+
+  useAuth({ requiredUserType: "admin" });
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -12,7 +16,6 @@ export default function AdminLayout() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      
       <header className="w-full flex items-center justify-between bg-gradient-to-r from-[#7C3AED] to-[#6200EE] px-8 py-4 shadow text-white">
         <div className="text-2xl font-bold tracking-wide">Growcery Admin</div>
         <button
@@ -22,7 +25,7 @@ export default function AdminLayout() {
           Log Out
         </button>
       </header>
-      
+
       <div className="flex flex-1">
         <AdminSidebar />
         <main className="flex-1 bg-[#F3F4F6]">

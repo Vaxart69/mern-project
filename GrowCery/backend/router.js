@@ -1,7 +1,7 @@
 // Import Auth Controllers
 import { login, signup } from './controllers/authController.js'
-import { createProduct } from './controllers/productController.js'
-import { deleteProduct } from './controllers/productController.js'
+import { createProduct, deleteProduct, getProducts } from './controllers/productController.js'
+
 
 function router(app) {
     // Enable CORS for all routes
@@ -19,6 +19,7 @@ function router(app) {
 
     app.post('/create-product', createProduct);
     app.delete('/delete-product/:productId', deleteProduct);
+    app.get('/products', getProducts);
 }
 
 export default router;

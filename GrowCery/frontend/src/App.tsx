@@ -11,6 +11,11 @@ import ProductListings from "./pages/admin/ProductListings";
 import OrderManagement from "./pages/admin/OrderManagement";
 import SalesReports from "./pages/admin/SalesReports";
 import AdminLayout from "./components/AdminLayout";
+import CustomerLayout from "./components/CustomerLayout";
+import Home from "./pages/customer/Home";
+import Cart from "./pages/customer/Cart";
+import AboutUs from "./pages/customer/AboutUs";
+import Orders from "./pages/customer/Orders";
 
 // define the routes
 const router = createBrowserRouter([
@@ -35,6 +40,16 @@ const router = createBrowserRouter([
       { path: "product-listings", element: <ProductListings /> },
       { path: "order-management", element: <OrderManagement /> },
       { path: "sales-reports", element: <SalesReports /> },
+    ],
+  },
+  {
+    path: "/customer",
+    element: <CustomerLayout />,
+    children: [
+      { path: "home", element: <Home /> },
+      { path: "cart", element: <Cart /> },
+      { path: "about-us", element: <AboutUs /> },
+      { path: "orders", element: <Orders /> },
     ],
   },
   {

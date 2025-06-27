@@ -65,3 +65,19 @@ export const deleteProduct = async (req, res) =>{
 
 }
 
+export const getProducts = async (req, res) => {
+
+  try {
+    const products = await Product.find();
+    res.status(200).json({
+      success: true,
+      products: products,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching products",
+      error: e.message,
+    });
+  }
+}
