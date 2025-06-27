@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // <-- import useNavigate
 import AnimatedShapes from "../components/AnimatedShapes";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const navigate = useNavigate(); // <-- for navigation
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -13,6 +15,37 @@ export default function SignIn() {
       ...prev,
       [name]: value,
     }));
+  };
+
+  // Add this function:
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const response = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+      localStorage.setItem("token", data.token);
+
+      // Decode JWT to get user type (should be 'userType')
+      const payload = JSON.parse(atob(data.token.split('.')[1]));
+      localStorage.setItem("user", JSON.stringify(payload));
+
+      // Redirect based on user type
+      if (payload.userType === "admin") {
+        navigate("/admin/order-management");
+      } else {
+        navigate("/customer/order-management");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login failed");
+    }
   };
 
   const formVariants = {
@@ -30,6 +63,7 @@ export default function SignIn() {
           initial="hidden"
           animate="visible"
           className="bg-[#1E1E1E] rounded-2xl shadow-lg p-10 w-full max-w-md flex flex-col gap-6"
+          onSubmit={handleSubmit} // <-- add this
         >
           <div className="flex flex-col items-center mb-2">
             <div className="w-20 h-20 rounded-full bg-[#7C3AED] flex items-center justify-center mb-2 shadow-lg">
@@ -120,6 +154,11 @@ export default function SignIn() {
               )}
             </button>
           </div>
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+              <span className="block sm:inline">{error}</span>
+            </div>
+          )}
           <button
             type="submit"
             className="bg-[#7C3AED] hover:bg-[#A78BFA] text-white font-semibold py-3 rounded-xl transition"
