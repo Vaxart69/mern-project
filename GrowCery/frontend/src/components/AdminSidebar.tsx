@@ -6,54 +6,54 @@ export default function AdminSidebar() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <aside className="min-h-screen w-64 bg-gradient-to-b from-[#7C3AED] to-[#6200EE] text-white flex flex-col shadow-lg">
-      <nav className="flex-1 flex flex-col gap-2 mt-8">
+    <aside className="min-h-screen w-64 bg-white border-r border-gray-200 shadow-sm">
+      <nav className="flex-1 flex flex-col gap-1 mt-8 px-4">
         <Link
           to="/admin/dashboard"
-          className={`px-6 py-3 rounded-l-full font-medium transition-colors ${
+          className={`px-4 py-3 rounded-lg font-medium transition-colors ${
             isActive("/admin/dashboard")
-              ? "bg-[#A78BFA] text-[#1E1E1E] shadow"
-              : "hover:bg-[#C4B5FD] hover:text-[#1E1E1E]"
+              ? "bg-gray-800 text-white shadow-sm"
+              : "text-gray-700 hover:bg-gray-100"
           }`}
         >
           Dashboard
         </Link>
         <Link
           to="/admin/user-accounts"
-          className={`px-6 py-3 rounded-l-full font-medium transition-colors ${
+          className={`px-4 py-3 rounded-lg font-medium transition-colors ${
             isActive("/admin/user-accounts")
-              ? "bg-[#A78BFA] text-[#1E1E1E] shadow"
-              : "hover:bg-[#C4B5FD] hover:text-[#1E1E1E]"
+              ? "bg-gray-800 text-white shadow-sm"
+              : "text-gray-700 hover:bg-gray-100"
           }`}
         >
           User Accounts
         </Link>
         <Link
           to="/admin/product-listings"
-          className={`px-6 py-3 rounded-l-full font-medium transition-colors ${
+          className={`px-4 py-3 rounded-lg font-medium transition-colors ${
             isActive("/admin/product-listings")
-              ? "bg-[#A78BFA] text-[#1E1E1E] shadow"
-              : "hover:bg-[#C4B5FD] hover:text-[#1E1E1E]"
+              ? "bg-gray-800 text-white shadow-sm"
+              : "text-gray-700 hover:bg-gray-100"
           }`}
         >
           Product Listings
         </Link>
         <Link
           to="/admin/order-management"
-          className={`px-6 py-3 rounded-l-full font-medium transition-colors ${
+          className={`px-4 py-3 rounded-lg font-medium transition-colors ${
             isActive("/admin/order-management")
-              ? "bg-[#A78BFA] text-[#1E1E1E] shadow"
-              : "hover:bg-[#C4B5FD] hover:text-[#1E1E1E]"
+              ? "bg-gray-800 text-white shadow-sm"
+              : "text-gray-700 hover:bg-gray-100"
           }`}
         >
           Order Management
         </Link>
         <Link
           to="/admin/sales-reports"
-          className={`px-6 py-3 rounded-l-full font-medium transition-colors ${
+          className={`px-4 py-3 rounded-lg font-medium transition-colors ${
             isActive("/admin/sales-reports")
-              ? "bg-[#A78BFA] text-[#1E1E1E] shadow"
-              : "hover:bg-[#C4B5FD] hover:text-[#1E1E1E]"
+              ? "bg-gray-800 text-white shadow-sm"
+              : "text-gray-700 hover:bg-gray-100"
           }`}
         >
           Sales Reports

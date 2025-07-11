@@ -1,32 +1,36 @@
 import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
-// mongoose.Schema source:
-// https://mongoosejs.com/docs/guide.html
-
-const orderSchema = new mongoose.Schema({
-    // source:
-    // https://medium.com/@kishantashok/the-mystery-behind-mongoose-types-objectid-vs-schema-types-objectid-a-typescript-adventure-089e7c5af27f
-    productId: {
+const orderSchema = new Schema({
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: 'User',
         required: true
     },
-    orderQuantity: {
-        type: Number,
-        required: true
-    },
-    price: { 
+    items: [{
+        productId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true
+        },
+        quantity: {
+            type: Number,
+            required: true,
+            min: 1
+        },
+        price: {
+            type: Number,
+            required: true
+        }
+    }],
+    totalAmount: {
         type: Number,
         required: true
     },
     orderStatus: {
-        type: Number, // 0 = Pending, 1 = Completed, 2 = Canceled
-        enum: [0, 1, 2],
+        type: Number, // 0 = Pending, 1 = Approved, 2 = Completed, 3 = Canceled
+        enum: [0, 1, 2, 3],
         default: 0
-    },
-    email: {
-        type: String,
-        required: true
     },
     dateOrdered: {
         type: Date,
@@ -36,8 +40,7 @@ const orderSchema = new mongoose.Schema({
         type: String,
         default: function () {
             const now = new Date();
-            return now.toLocaleTimeString(); // Returns time as a string like "11:30:45 AM"
-            // src: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString
+            return now.toLocaleTimeString();
         }
     }
 });

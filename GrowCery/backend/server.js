@@ -1,11 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
+import dotenv from "dotenv"; 
 import router from "./router.js";
 
+// setup the web server
 const app = express();
 dotenv.config()
 
+// parse incoming requests with JSON payloads
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 router(app);

@@ -1,15 +1,17 @@
 import mongoose from 'mongoose';
 
+const { Schema } = mongoose;
+
 // mongoose.Schema source:
 // https://mongoosejs.com/docs/guide.html
 
 // user schema
-const User = mongoose.Schema({
+const User = new Schema({
     firstName: {
         type: String,
         required: true
     },
-    middleName: { // Optional
+    middleName: { 
         type: String,
     },
     lastName: {

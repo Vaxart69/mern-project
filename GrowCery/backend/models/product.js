@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
-// mongoose.Schema source:
-// https://mongoosejs.com/docs/guide.html
+const { Schema } = mongoose;
 
-const ProductSchema = new mongoose.Schema({
+
+const ProductSchema = new Schema ({
   productName: {
     type: String,
     required: true

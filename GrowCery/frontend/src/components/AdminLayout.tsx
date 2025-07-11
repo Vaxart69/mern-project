@@ -5,7 +5,6 @@ import { useAuth } from "../hooks/useAuth";
 export default function AdminLayout() {
   const navigate = useNavigate();
 
-
   useAuth({ requiredUserType: "admin" });
 
   const handleLogout = () => {
@@ -15,12 +14,14 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="w-full flex items-center justify-between bg-gradient-to-r from-[#7C3AED] to-[#6200EE] px-8 py-4 shadow text-white">
-        <div className="text-2xl font-bold tracking-wide">Growcery Admin</div>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <header className="w-full flex items-center justify-between bg-white border-b border-gray-200 px-8 py-4 shadow-sm">
+        <div className="text-2xl font-bold tracking-wide text-gray-800">
+          Growcery Admin
+        </div>
         <button
           onClick={handleLogout}
-          className="bg-[#A78BFA] hover:bg-[#C4B5FD] text-[#1E1E1E] font-semibold px-5 py-2 rounded-xl transition"
+          className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-5 py-2 rounded-lg transition"
         >
           Log Out
         </button>
@@ -28,7 +29,7 @@ export default function AdminLayout() {
 
       <div className="flex flex-1">
         <AdminSidebar />
-        <main className="flex-1 bg-[#F3F4F6]">
+        <main className="flex-1 bg-gray-50 p-6">
           <Outlet />
         </main>
       </div>
