@@ -273,7 +273,9 @@ export default function Cart() {
                             −
                           </button>
                           <span className="w-6 text-center text-sm font-medium text-black">
-                            {updating === item.productId._id ? "..." : item.quantity}
+                            {updating === item.productId._id
+                              ? "..."
+                              : item.quantity}
                           </span>
                           <button
                             onClick={() =>

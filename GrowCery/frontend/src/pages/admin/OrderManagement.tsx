@@ -79,7 +79,7 @@ export default function OrderManagement() {
       if (data.success) {
         await fetchOrders();
         // Trigger a custom event to notify other components about order status change
-        window.dispatchEvent(new CustomEvent('orderStatusUpdated'));
+        window.dispatchEvent(new CustomEvent("orderStatusUpdated"));
       } else {
         setError(data.message || "Failed to update order status");
       }
@@ -87,7 +87,6 @@ export default function OrderManagement() {
       setError("Error updating order status");
     }
   };
-
 
   const getStatusColor = (status: number) => {
     switch (status) {
@@ -126,7 +125,9 @@ export default function OrderManagement() {
       {/* Header */}
       <div className="w-full flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-4xl font-bold mb-2 text-black">Order Management</h1>
+          <h1 className="text-4xl font-bold mb-2 text-black">
+            Order Management
+          </h1>
           <p className="text-lg font-medium text-gray-700">
             Manage and track customer orders
           </p>
@@ -250,8 +251,7 @@ export default function OrderManagement() {
                   <div className="max-w-xs">
                     {order.items.slice(0, 2).map((item, index) => (
                       <div key={index} className="text-xs">
-                        {item.productId?.productName || "Unknown Product"}{" "}
-                        (x
+                        {item.productId?.productName || "Unknown Product"} (x
                         {item.quantity})
                       </div>
                     ))}
