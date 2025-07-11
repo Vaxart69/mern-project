@@ -122,7 +122,7 @@ export default function UserAccounts() {
       ) : (
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <table className="w-full">
-            <thead className="bg-white border-b border-gray-200">
+            <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 {["ID", "Full Name", "Email", "Total Orders", "Actions"].map(
                   (header) => (
