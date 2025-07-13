@@ -68,8 +68,6 @@ export default function ProductDetail() {
         setMessage(data.message || "Failed to add item to cart");
       }
     } catch (error) {
-      console.error("Add to cart error:", error);
-      console.log("Detailed error object:", error); // <-- Added for debugging
       setMessage("Error adding item to cart");
     } finally {
       setAddingToCart(false);
