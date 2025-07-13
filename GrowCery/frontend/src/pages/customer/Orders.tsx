@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EmptyState from "../../components/EmptyState";
 
+// define a construct of order item
 interface OrderItem {
   productId: {
     _id: string;
@@ -14,6 +15,7 @@ interface OrderItem {
   price: number;
 }
 
+// define a construct of the order itself
 interface Order {
   _id: string;
   items: OrderItem[];
@@ -25,22 +27,28 @@ interface Order {
 
 export default function Orders() {
   const navigate = useNavigate();
+  // initialize an empty array for orders
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchOrders();
+    fetchOrders(); // get the orders when the component moounts
   }, []);
 
+  // this is the function to fetch the orders from the API
   const fetchOrders = async () => {
     try {
+      // validate the token of the user (stored in the local)
       const token = localStorage.getItem("token");
       if (!token) {
         navigate("/login");
         return;
       }
 
+      // make a get request to the orders endpoint
+      // the token is passed first in the headers to the auth middle for validation
+      // before going to the main controller
       const response = await fetch("http://localhost:3000/orders", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -61,6 +69,7 @@ export default function Orders() {
     }
   };
 
+  // get the status text based on the status code
   const getStatusText = (status: number) => {
     switch (status) {
       case 0:
@@ -76,6 +85,7 @@ export default function Orders() {
     }
   };
 
+  // setting status color
   const getStatusColor = (status: number) => {
     switch (status) {
       case 0:
@@ -91,8 +101,10 @@ export default function Orders() {
     }
   };
 
+  // get the type of product based on the type code
   const getType = (type: number) => (type === 1 ? "Crops" : "Poultry");
 
+  // format the date from the database
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -102,6 +114,7 @@ export default function Orders() {
     });
   };
 
+  // loading state
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -111,8 +124,9 @@ export default function Orders() {
   }
 
   return (
-    <div className="h-full bg-gray-100 p-3 md:p-6">
-      <div className="max-w-6xl mx-auto h-full">
+    <div className="bg-gray-100 p-3 md:p-6">
+      <div className="max-w-6xl mx-auto">
+        {/* run the empty state component if there are no orders */}
         {orders.length === 0 ? (
           <EmptyState
             icon="📦"
@@ -122,7 +136,8 @@ export default function Orders() {
             onButtonClick={() => navigate("/customer/home")}
           />
         ) : (
-          <div className="bg-white rounded-lg shadow-md p-4 md:p-6 h-full flex flex-col">
+          // the main card for the orders
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 md:mb-6">
               <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-2 md:mb-0">
                 My Orders
@@ -141,81 +156,79 @@ export default function Orders() {
               </div>
             )}
 
-            {/* Orders List - Scrollable */}
-            <div className="flex-1 overflow-y-auto">
-              <div className="space-y-4">
-                {orders.map((order) => (
-                  <div
-                    key={order._id}
-                    className="border border-gray-200 rounded-lg p-3 md:p-4"
-                  >
-                    {/* Order Header */}
-                    <div className="flex flex-col sm:flex-row justify-between items-start gap-2 mb-3">
-                      <div>
-                        <h3 className="text-base font-semibold text-gray-800">
-                          Order #{order._id.slice(-8).toUpperCase()}
-                        </h3>
-                        <p className="text-xs text-gray-600">
-                          {formatDate(order.dateOrdered)} at {order.time}
-                        </p>
-                      </div>
-                      <div className="sm:text-right w-full sm:w-auto">
-                        <span
-                          className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                            order.orderStatus
-                          )}`}
-                        >
-                          {getStatusText(order.orderStatus)}
-                        </span>
-                        <p className="text-base font-bold text-[#222] mt-1">
-                          ₱{order.totalAmount.toFixed(2)}
-                        </p>
-                      </div>
+            {/* Orders List */}
+            <div className="space-y-4">
+              {orders.map((order) => (
+                <div
+                  key={order._id}
+                  className="border border-gray-200 rounded-lg p-3 md:p-4"
+                >
+                  {/* Order Header */}
+                  <div className="flex flex-col sm:flex-row justify-between items-start gap-2 mb-3">
+                    <div>
+                      <h3 className="text-base font-semibold text-gray-800">
+                        Order #{order._id.slice(-8).toUpperCase()}
+                      </h3>
+                      <p className="text-xs text-gray-600">
+                        {formatDate(order.dateOrdered)} at {order.time}
+                      </p>
                     </div>
-
-                    {/* Order Items */}
-                    <div className="space-y-2">
-                      <h4 className="text-sm font-medium text-gray-700 border-b pb-1">
-                        Items Ordered:
-                      </h4>
-                      {order.items.map((item, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg"
-                        >
-                          <img
-                            src={
-                              item.productId.productImage ||
-                              "https://via.placeholder.com/60"
-                            }
-                            alt={item.productId.productName}
-                            className="w-12 h-12 object-cover rounded-md"
-                          />
-                          <div className="flex-1 min-w-0">
-                            <h5 className="font-medium text-sm text-gray-800 truncate">
-                              {item.productId.productName}
-                            </h5>
-                            <p className="text-xs text-gray-600">
-                              {getType(item.productId.productType)}
-                            </p>
-                            <p className="text-xs text-gray-600">
-                              Quantity: {item.quantity}
-                            </p>
-                          </div>
-                          <div className="text-right shrink-0">
-                            <p className="text-xs font-medium text-gray-800">
-                              ₱{item.price.toFixed(2)} x {item.quantity}
-                            </p>
-                            <p className="text-xs font-bold text-[#222]">
-                              ₱{(item.price * item.quantity).toFixed(2)}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
+                    <div className="sm:text-right w-full sm:w-auto">
+                      <span
+                        className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                          order.orderStatus
+                        )}`}
+                      >
+                        {getStatusText(order.orderStatus)}
+                      </span>
+                      <p className="text-base font-bold text-[#222] mt-1">
+                        ₱{order.totalAmount.toFixed(2)}
+                      </p>
                     </div>
                   </div>
-                ))}
-              </div>
+
+                  {/* Order Items */}
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-gray-700 border-b pb-1">
+                      Items Ordered:
+                    </h4>
+                    {order.items.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg"
+                      >
+                        <img
+                          src={
+                            item.productId.productImage ||
+                            "https://via.placeholder.com/60"
+                          }
+                          alt={item.productId.productName}
+                          className="w-12 h-12 object-cover rounded-md"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h5 className="font-medium text-sm text-gray-800 truncate">
+                            {item.productId.productName}
+                          </h5>
+                          <p className="text-xs text-gray-600">
+                            {getType(item.productId.productType)}
+                          </p>
+                          <p className="text-xs text-gray-600">
+                            Quantity: {item.quantity}
+                          </p>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p className="text-xs font-medium text-gray-800">
+                            ₱{item.price.toFixed(2)} x {item.quantity}
+                          </p>
+                          <p className="text-xs font-bold text-[#222]">
+                            ₱{(item.price * item.quantity).toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}

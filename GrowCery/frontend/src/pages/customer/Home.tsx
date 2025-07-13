@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EmptyState from "../../components/EmptyState";
 
+// defined a construct of product for type safety
 interface Product {
   _id: string;
   productName: string;
@@ -12,11 +13,16 @@ interface Product {
 
 export default function Home() {
   const navigate = useNavigate();
+
+  // initialized an empty array for products
   const [products, setProducts] = useState<Product[]>([]);
+
+  // set loading state to true initially until the products are fetched
   const [loading, setLoading] = useState(true);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [sortBy, setSortBy] = useState<string>("name-asc");
 
+  // fetch the products from the API for every reload
   useEffect(() => {
     fetch("http://localhost:3000/products")
       .then((res) => res.json())
@@ -25,12 +31,15 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, []);
 
+  // get the type of the product based on its type number (1 = Crops, 2 = Poultry)
   const getType = (type: number) => (type === 1 ? "Crops" : "Poultry");
 
+  // function to navigate to the product details page when a product is clicked
   const handleProductClick = (productId: string) => {
     navigate(`/customer/product/${productId}`);
   };
 
+  // for sorting the products
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortBy(e.target.value);
   };
@@ -52,6 +61,7 @@ export default function Home() {
     });
   };
 
+  // filter the products based on selected categories and run the sorting function to sort them
   const getFilteredAndSortedProducts = () => {
     const filtered = products.filter((product) =>
       selectedCategories.length
@@ -61,7 +71,13 @@ export default function Home() {
     return sortProducts(filtered);
   };
 
-  if (loading) return <div className="p-8">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl text-gray-600">Loading products...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col md:flex-row h-full bg-gradient-to-br from-[#F3F4F6] to-[#E5E7EB]">
@@ -71,6 +87,7 @@ export default function Home() {
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-3">Category</h3>
           <div className="space-y-2">
+            {/* run the selected categories on change */}
             <label className="flex items-center">
               <input
                 type="radio"

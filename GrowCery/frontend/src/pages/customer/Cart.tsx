@@ -183,8 +183,8 @@ export default function Cart() {
   }
 
   return (
-    <div className="h-full bg-gradient-to-br from-[#F3F4F6] to-[#E5E7EB] p-4 md:p-8">
-      <div className="max-w-4xl mx-auto h-full">
+    <div className="bg-gray-100 p-3 md:p-6">
+      <div className="max-w-6xl mx-auto">
         {cartItems.length === 0 ? (
           <EmptyState
             icon="🛒"
@@ -194,15 +194,15 @@ export default function Cart() {
             onButtonClick={() => navigate("/customer/home")}
           />
         ) : (
-          <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 h-full flex flex-col">
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 md:mb-6">
+              <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-2 md:mb-0">
                 Shopping Cart
               </h1>
               <button
                 onClick={clearCart}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm md:text-base w-full md:w-auto"
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition text-sm"
               >
                 Clear Cart
               </button>
@@ -210,19 +210,19 @@ export default function Cart() {
 
             {/* Message */}
             {message && (
-              <div className="mb-6 p-3 rounded-lg bg-green-100 text-green-700 text-sm md:text-base">
+              <div className="mb-4 p-3 rounded-lg bg-green-100 text-green-700 text-sm">
                 {message}
               </div>
             )}
 
-            {/* Cart Items - Scrollable */}
-            <div className="flex-1 overflow-y-auto mb-6">
-              <div className="space-y-2">
-                {cartItems.map((item) => (
-                  <div
-                    key={item._id}
-                    className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg bg-white"
-                  >
+            {/* Cart Items */}
+            <div className="space-y-4">
+              {cartItems.map((item) => (
+                <div
+                  key={item._id}
+                  className="border border-gray-200 rounded-lg p-3 md:p-4"
+                >
+                  <div className="flex items-center gap-3">
                     {/* Item Selection Checkbox */}
                     <div className="flex-shrink-0">
                       <input
@@ -252,7 +252,7 @@ export default function Cart() {
                         <p className="text-xs text-gray-500">
                           {getType(item.productId.productType)}
                         </p>
-                        <p className="text-sm font-semibold text-[#FF4B2B]">
+                        <p className="text-sm font-semibold text-[#43A047]">
                           ₱{item.productId.price.toFixed(2)}
                         </p>
                       </div>
@@ -309,12 +309,12 @@ export default function Cart() {
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
 
-            {/* Cart Total - Fixed at bottom */}
-            <div className="border-t border-gray-200 pt-4">
+            {/* Cart Total */}
+            <div className="border-t border-gray-200 pt-4 mt-6">
               <div className="flex justify-between items-center mb-6">
                 <span className="text-xl md:text-2xl font-bold text-gray-800">
                   Total:

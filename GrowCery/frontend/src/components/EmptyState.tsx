@@ -1,5 +1,6 @@
 import React from "react";
 
+// this is just for showing an empty state when there are no orders or products. 
 interface EmptyStateProps {
   icon: React.ReactNode;
   title: string;

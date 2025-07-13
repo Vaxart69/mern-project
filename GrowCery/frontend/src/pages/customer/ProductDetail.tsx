@@ -139,7 +139,7 @@ export default function ProductDetail() {
 
             <div className="mb-4 md:mb-6">
               <span className="text-sm md:text-base text-gray-700">
-                Available: {product.productQuantity} units
+                {product.productQuantity} left
               </span>
             </div>
 
